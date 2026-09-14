@@ -21,7 +21,6 @@ D&D5e 5.2.5 is a Foundry v13 target. D&D5e 5.3.x supports Foundry v13 and v14. D
 - Advancing world time does not reduce a paused effect's saved duration.
 - Resuming starts a new countdown from the saved remainder.
 - Keeps the normal Foundry **Disabled** control separate from true timer pausing.
-- Russian and English localization.
 
 ## Supported effects
 
