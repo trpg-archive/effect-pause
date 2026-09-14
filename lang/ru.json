@@ -1,0 +1,8 @@
+{
+  "EFFECTPAUSE.Pause": "Поставить эффект на паузу",
+  "EFFECTPAUSE.Resume": "Продолжить эффект",
+  "EFFECTPAUSE.FreezeDisabled": "Заморозить оставшееся время отключённого эффекта",
+  "EFFECTPAUSE.PausedNotice": "Эффект поставлен на паузу",
+  "EFFECTPAUSE.ResumedNotice": "Эффект продолжен",
+  "EFFECTPAUSE.Error": "Не удалось изменить эффект"
+}

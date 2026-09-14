@@ -1,0 +1,90 @@
+/* Effect Pause v0.2.0 */
+
+.effect-pause-icon-button {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.effect-pause-icon-button:hover,
+.effect-pause-icon-button:focus-visible {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  box-shadow: none;
+  outline: none;
+}
+
+.effect-pause-icon-button.is-paused {
+  opacity: 1;
+}
+
+.effect-pause-icon-button.is-paused > i {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+.effect-pause-icon-button.is-busy,
+.effect-pause-icon-button[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: wait;
+  pointer-events: none;
+}
+
+/*
+ * Default D&D5e 5.2/5.3 sheet
+ *
+ * Its native effect actions are <a class="effect-control item-control">.
+ * On that sheet our control uses the same element/classes, so do not impose
+ * the 24px Tidy/fallback button box: let D&D5e's own item-controls rules
+ * determine spacing and vertical alignment.
+ */
+.dnd5e2 .effects-list .effect-controls > .effect-pause-icon-button.effect-control.item-control {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0 6px 0 0;
+  padding: 0 3px;
+  border-radius: 0;
+  background: transparent;
+  line-height: inherit;
+  font-size: inherit;
+  align-self: center;
+}
+
+/*
+ * Keep a deliberate gap between our pause/play control and D&D5e's native
+ * toggle/menu actions. The wider hit area plus 6px separation reduces
+ * accidental clicks without changing the rest of the effect row.
+ */
+
+.dnd5e2 .effects-list .effect-controls > .effect-pause-icon-button.effect-control.item-control:hover,
+.dnd5e2 .effects-list .effect-controls > .effect-pause-icon-button.effect-control.item-control:focus-visible {
+  background: transparent;
+}
+
+/* Fallback used only if a sheet exposes an effect row but no known action container. */
+.effect-pause-row-fallback {
+  position: relative;
+}
+
+.effect-pause-row-fallback > .effect-pause-icon-button {
+  margin-inline-start: auto;
+}

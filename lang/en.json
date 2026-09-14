@@ -1,0 +1,8 @@
+{
+  "EFFECTPAUSE.Pause": "Pause effect",
+  "EFFECTPAUSE.Resume": "Resume effect",
+  "EFFECTPAUSE.FreezeDisabled": "Freeze the remaining duration of the disabled effect",
+  "EFFECTPAUSE.PausedNotice": "Effect paused",
+  "EFFECTPAUSE.ResumedNotice": "Effect resumed",
+  "EFFECTPAUSE.Error": "Could not change effect"
+}

@@ -1,0 +1,84 @@
+name: Build Foundry Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Validate tag and manifest version
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${{ github.event.release.tag_name }}"
+          TAG_VERSION="${TAG#v}"
+          MANIFEST_VERSION="$(python3 -c 'import json; print(json.load(open("module.json", encoding="utf-8"))["version"])')"
+
+          if [[ "$TAG_VERSION" != "$MANIFEST_VERSION" ]]; then
+            echo "Release tag version ($TAG_VERSION) does not match module.json version ($MANIFEST_VERSION)."
+            exit 1
+          fi
+
+      - name: Build Foundry package
+        shell: bash
+        env:
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+
+          rm -rf build dist
+          mkdir -p build/effect-pause dist
+
+          cp module.json README.md CHANGELOG.md LICENSE build/effect-pause/
+          cp -R scripts styles lang build/effect-pause/
+
+          python3 <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          repository = os.environ["REPOSITORY"]
+          tag = os.environ["TAG"]
+          base = f"https://github.com/{repository}"
+
+          manifest_path = Path("build/effect-pause/module.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+          manifest["url"] = base
+          manifest["manifest"] = f"{base}/releases/latest/download/module.json"
+          manifest["download"] = f"{base}/releases/download/{tag}/effect-pause.zip"
+          manifest["bugs"] = f"{base}/issues"
+          manifest["changelog"] = f"{base}/releases/tag/{tag}"
+
+          text = json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
+          manifest_path.write_text(text, encoding="utf-8")
+          Path("dist/module.json").write_text(text, encoding="utf-8")
+          PY
+
+          (
+            cd build
+            zip -r ../dist/effect-pause.zip effect-pause
+          )
+
+      - name: Upload Foundry release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release upload "${{ github.event.release.tag_name }}" \
+            dist/module.json \
+            dist/effect-pause.zip \
+            --clobber
